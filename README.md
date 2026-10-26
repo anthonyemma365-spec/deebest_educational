@@ -1,1 +1,0 @@
-# deebest_educational
