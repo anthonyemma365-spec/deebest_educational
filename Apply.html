@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+< lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Apply Now | DeeBest Educational Institute</title>
+
+    <meta name="description"
+          content="Apply to DeeBest Educational Institute for quality examination preparation.">
+<link rel="stylesheet" href="styles_1.css"></link>
+  
+</head>
+
+<><header>
+    <h1>DeeBest Educational Institute</h1>
+    <p>350+ Mission 2027 | Your Best Shot to Success</p>
+</header>
+
+    <main class="container">
+
+    <img src="Images/IMG-20261025-WA0003.jpg"
+          alt= "Mission 2027"
+      style="width:100%;
+             height:auto;"> </img>
+            <h1>DeeBest Educational Institute</h1>
+
+            <p>
+                Start your journey to academic success!
+                Complete the application form below to get started.
+            </p>
+      
+
+        <form id="applicationForm">
+
+    <div id="applicationStatus" role="status"></div>
+
+
+            <div class="form-group">
+                <label for="fullname">Full Name *</label>
+
+                <input type="text"
+                       id="fullname"
+                       name="Full Name"
+                       placeholder="Enter your full name"
+                       autocomplete="name"
+                       required>
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Phone Number *</label>
+
+                <input type="tel"
+                       id="phone"
+                       name="Phone Number"
+                       placeholder="e.g. 08012345678"
+                       autocomplete="tel"
+                       required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email Address *</label>
+
+                <input type="email"
+                       id="email"
+                       name="Email Address"
+                       placeholder="Enter your email"
+                       autocomplete="email"
+                       required>
+            </div>
+
+            <div class="form-group">
+                <label for="exam">Examination *</label>
+
+                <select id="exam" name="Examination" required>
+                    <option value="">Select examination</option>
+                    <option value="JAMB UTME">JAMB UTME</option>
+                    <option value="Post-UTME">Post-UTME</option>
+                    <option value="WAEC">WAEC</option>
+                    <option value="NECO">NECO</option>
+                    <option value="JUPEB">JUPEB</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+<div class="form group"> <label for="course">Course of study*</label>
+  <input id="course"
+         type="text"
+    name="Subjects Combination"
+         placeholder= "Your Course"
+         required>
+        </div>
+            <div class="form-group">
+                <label for="learning">Preferred Learning Method *</label>
+
+                <select id="learning" name="Learning Method" required>
+                    <option value="">Choose a learning method</option>
+                    <option value="Private Tutoring">Private Tutoring</option>
+                    <option value="Online Classes">Online Classes</option>
+                    <option value="Physical Classes">Physical Classes</option>
+                    <option value="CBT Practice">CBT Practice</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="message">Additional Information</label>
+
+                <textarea id="message"
+                          name="Additional Information"
+                          placeholder="Tell us anything else we should know (optional)
+                  including any other exams..."></textarea>
+            </div>
+
+            <button type="submit" class="submit-btn">
+                Submit Application
+            </button>
+
+        </form>
+
+        <a href="Index.html" class="back-link">
+            ← Back to Homepage
+        </a>
+
+        <div class="footer">
+            © 2027 DeeBest Educational Institute.
+            All rights reserved.
+        </div>
+
+    </main>
+
+<script src="scripts.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script>
+const SUPABASE_URL = "https://vyotydvflxcskdlnjzod.supabase.co";
+
+const SUPABASE_KEY = "sb_publishable_U0nrsCnThXgYMNyg6Dla1Q_aOF3a7MZ";
+
+const db = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+
+const form = document.getElementById("applicationForm");
+const statusBox = document.getElementById("applicationStatus");
+
+form.addEventListener("submit", async function(event) {
+    event.preventDefault();
+
+    const button = form.querySelector('button[type="submit"]');
+
+    button.disabled = true;
+    button.textContent = "Submitting...";
+
+    statusBox.textContent = "Submitting your application...";
+
+    try {
+        const application = {
+            p_full_name: form.querySelector('[name="Full Name"]').value.trim(),
+            p_phone: form.querySelector('[name="Phone Number"]').value.trim(),
+            p_email: form.querySelector('[name="Email Address"]').value.trim(),
+            p_examination: form.querySelector('[name="Examination"]').value,
+            p_course: form.querySelector('[name="Subjects Combination"]').value.trim(),
+            p_learning_method: form.querySelector('[name="Learning Method"]').value,
+            p_additional_information: form.querySelector('[name="Additional Information"]').value.trim() || null
+        };
+
+        const { data, error } = await db.rpc(
+            "submit_student_application",
+            application
+        );
+
+        if (error) {
+            throw error;
+        }
+
+        statusBox.textContent =
+            "Application submitted successfully! Your Application ID is: " + data;
+
+        statusBox.style.color = "green";
+
+        form.reset();
+
+        button.textContent = "Application Submitted";
+
+    } catch (error) {
+        console.error("Application error:", error);
+
+        statusBox.textContent =
+            "We could not submit your application. Please try again.";
+
+        statusBox.style.color = "red";
+
+        button.disabled = false;
+        button.textContent = "Submit Application";
+    }
+});
+</script></body>
+</html>
